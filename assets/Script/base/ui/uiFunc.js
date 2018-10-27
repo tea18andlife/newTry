@@ -83,20 +83,21 @@ uiFunc.openUI = function(uiPath, callBack) {
  * @param {Function} callBack 成功回调 
  * @param {Bool} clear 清除界面,默认不清除界面 
  */
-uiFunc.closeUI = function(uiPath, callBack,clear) {
+uiFunc.closeUI = function(uiPath, noClear, callBack) {
     for (var i = uiFunc.uiList.length - 1; i >= 0; i--) {
         var temp = uiFunc.uiList[i];
         if (temp && (temp.pathName === uiPath || (typeof (uiPath) == "object" && temp === uiPath.node))) {
             temp.active = false;
-            if (clear)
-            {
-                temp.removeFromParent(true);
-            }
-            else
+            if (noClear)
             {
                 temp.removeFromParent(false);
                 uiFunc.cacheUIList.push(temp);
             }
+            else
+            {
+                temp.removeFromParent(true);
+            }
+            
             uiFunc.uiList.splice(i, 1);
 
             if (callBack) {

@@ -59,11 +59,12 @@ cc.Class({
     onEnter () {
     	var self = this;
     	this.btn_1.quickBt(function () {
-    		uiFunc.closeUI(self);
-            uiFunc.openUI("2048/ui2048");
+    		uiFunc.closeUI(self, true);
+            // uiFunc.openUI("2048/ui2048");
+            uiFunc.openUI("plusOne/uiPlusOne");
     	});
     },
     touchClose () {
-    	uiFunc.closeUI(this);
+    	uiFunc.closeUI(this, true);
     },
 });
