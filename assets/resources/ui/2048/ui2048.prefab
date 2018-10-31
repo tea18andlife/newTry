@@ -90,7 +90,7 @@
   {
     "__type__": "cc.Node",
     "_name": "back_ground",
-    "_objFlags": 512,
+    "_objFlags": 0,
     "_parent": {
       "__id__": 1
     },
@@ -111,9 +111,9 @@
     "_opacity": 255,
     "_color": {
       "__type__": "cc.Color",
-      "r": 253,
-      "g": 253,
-      "b": 253,
+      "r": 241,
+      "g": 229,
+      "b": 229,
       "a": 255
     },
     "_contentSize": {

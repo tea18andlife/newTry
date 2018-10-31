@@ -238,6 +238,16 @@ String.prototype.format = function(args) {
     return result;
 };
 
+// Array.prototype.contains = function (value)
+// {
+//     for (var i = 0; i < this.length; i++) {
+//         if (this[i] == value) {
+//             return true;
+//         }
+//     }
+//     return false;
+// }
+
 // Define部分
 window.DF = {};
 DF.plusOneColors = {
