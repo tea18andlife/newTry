@@ -188,4 +188,8 @@ util.ifNull = function(mParam, mDefault){
     }
 };
 
+util.getRandom = function (maxSize) {
+    return Math.floor(Math.random() * maxSize) % maxSize;
+}
+
 module.exports = util;

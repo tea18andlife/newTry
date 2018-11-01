@@ -6,6 +6,7 @@ cc.Class({
 		console.log("mainScene Start");
 
         // uiFunc.openUI("hall/uiHall");
-        uiFunc.openUI("plusOne/uiPlusOne");
+        // uiFunc.openUI("plusOne/uiPlusOne");
+        uiFunc.openUI("popStar/uiPopStar");
     },
 });

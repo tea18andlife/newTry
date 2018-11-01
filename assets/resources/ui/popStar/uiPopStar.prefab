@@ -37,10 +37,13 @@
     "_components": [
       {
         "__id__": 79
+      },
+      {
+        "__id__": 80
       }
     ],
     "_prefab": {
-      "__id__": 80
+      "__id__": 81
     },
     "_opacity": 255,
     "_color": {
@@ -2778,6 +2781,19 @@
     "_isAbsVerticalCenter": true,
     "_originalWidth": 720,
     "_originalHeight": 1280,
+    "_id": ""
+  },
+  {
+    "__type__": "5f8498f5VpGQLgb60RRvIR3",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "tilePre": {
+      "__uuid__": "dc378061-c563-49f6-a98a-c72cea71fdd1"
+    },
     "_id": ""
   },
   {

@@ -211,6 +211,17 @@ cc.Node.prototype.delayCall = function(func, delayTime, bRepeat) {
     this.runAction(action);
 };
 /**
+ * 设置节点上label组件的文本
+ * @param str
+ */
+cc.Node.prototype.setLabel=function(str){
+    this._lwLabel=this._lwLabel || this.getComponent(cc.Label);
+    if((str||str===0)&&this._lwLabel){
+        this._lwLabel.string=str;
+    }
+};
+
+/**
  * 参考c#的String.format() ,使用方式 "ac{0}vb{1}b".format("m","n") => acmvbnb
  * @param args
  * @returns {String}
