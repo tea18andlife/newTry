@@ -192,4 +192,13 @@ util.getRandom = function (maxSize) {
     return Math.floor(Math.random() * maxSize) % maxSize;
 }
 
+util.tabcontains = function (tab, value) {
+    for (var i = 0; i < tab.length; i++) {
+        if (tab[i] == value) {
+            return true;
+        }
+    }
+    return false;
+};
+
 module.exports = util;

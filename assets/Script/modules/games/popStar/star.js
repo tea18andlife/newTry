@@ -19,4 +19,7 @@ cc.Class({
     	this.node.x = (this.game.sp_main.width / this.game.numX)*(colIndex+0.5);
     	this.node.y = (this.game.sp_main.height / this.game.numY)*(rowIndex+0.5);
     },
+    // resetPos () {
+    //     this.setArrPosition(this.starData.indexOfColumn, this.starData.indexOfRow)
+    // },
 });
