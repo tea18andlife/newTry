@@ -16,8 +16,19 @@ cc.Class({
     	this.node.color = colors[which];
     },
     setArrPosition (colIndex, rowIndex) {
-    	this.node.x = (this.game.sp_main.width / this.game.numX)*(colIndex+0.5);
-    	this.node.y = (this.game.sp_main.height / this.game.numY)*(rowIndex+0.5);
+    	var pos = this.getArrPos(colIndex, rowIndex);
+    	this.node.setPosition(pos);
+    },
+    getArrPos (colIndex, rowIndex) {
+    	var x = (this.game.sp_main.width / this.game.numX)*(colIndex+0.5);
+    	var y =(this.game.sp_main.height / this.game.numY)*(rowIndex+0.5);
+    	return cc.v2(x, y);
+    },
+    moveArrPos (colIndex, rowIndex, time) {
+    	time = util.ifNull(time, 0.18)
+    	var pos = this.getArrPos(colIndex, rowIndex);
+    	var moveAction = cc.moveTo(time, pos);
+    	this.node.runAction(moveAction);
     },
     // resetPos () {
     //     this.setArrPosition(this.starData.indexOfColumn, this.starData.indexOfRow)

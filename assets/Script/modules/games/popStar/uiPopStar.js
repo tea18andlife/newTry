@@ -9,6 +9,10 @@ cc.Class({
             default:null,
             type:cc.Prefab
         },
+        tamplateLabel:{
+            default:null,
+            type:cc.Node
+        },
     },
 
     start () {
@@ -23,10 +27,7 @@ cc.Class({
 
         this.totalScore = 0;
         this.isClear = false;
-        // var self = this;
-        // this.btn_back.quickBt(function () {
-        //     self.touchBack();
-        // });
+
         this.init();
     },
     init () {
@@ -37,7 +38,7 @@ cc.Class({
         this.lb_stage.setLabel(this.currentLevel);
         // 目标分数
         this.lb_target.setLabel(1000*(1+this.currentLevel)*this.currentLevel/2);
-        // 得分砸·
+        // 得分
         this.lb_score.setLabel(this.totalScore);
         // 最高分 读取缓存 先跳过
         this.bestScore = cc.sys.localStorage.getItem("starBestScore");
@@ -48,10 +49,6 @@ cc.Class({
         }
         this.lb_best_score.setLabel(this.bestScore);
 
-        // var self = this;
-        // this.sp_main.on(cc.Node.EventType.TOUCH_START, function(event) {
-        //     console.log("event", event);
-        // });
         this.sp_main.on(cc.Node.EventType.TOUCH_START, this.onTouchBegan, this);
     },
     onTouchBegan: function (event) {
@@ -61,22 +58,17 @@ cc.Class({
         var pos = event.touch.getLocation();
         pos = this.sp_main.convertToNodeSpace(pos);
         this.ccTouchBeganPos = pos;
-        var star_width = 52;
 
         for (var i = 0; i < this.starTable.length; i++) {
-            // var sprites = this.starTable[i];
             for (var j = 0; j < this.starTable[i].length; j++) {
-                // var pSprite0 = sprites[j];
                 if (this.starTable[i][j] && this.starTable[i][j] != null) {
                     var mPos = this.starTable[i][j].getPosition();
-
-                    var ccRect = cc.rect(mPos.x-star_width/2, mPos.y-star_width/2, star_width, star_width);
+                    var ccRect = cc.rect(mPos.x-this.starSize/2, mPos.y-this.starSize/2, this.starSize, this.starSize);
                     var pSprite0 = this.starTable[i][j];
                     if (ccRect.contains(this.ccTouchBeganPos)) {
                         if (this.sameColorList.length > 1) {
-                            // if (this.sameColorList.contains(pSprite0)) {
                             if (util.tabcontains(this.sameColorList, pSprite0)) {
-                    //             Sound.playEffect(PS_MAIN_SOUNDS.broken);
+                                // Sound.playEffect(PS_MAIN_SOUNDS.broken);
                                 util.mlog("Sound.broken");
                                 this.removeSameColorStars();
                                 this.lb_tipScore.active = false;
@@ -89,6 +81,7 @@ cc.Class({
                                 this.checkSameColorStars(pSprite0);
                                 if (this.sameColorList.length > 1) {
                                     // Sound.playEffect(PS_MAIN_SOUNDS.select);
+                                    util.mlog("sound.select");
                                     this.showScoreTip();
                                 }
                                 else {
@@ -97,7 +90,6 @@ cc.Class({
                             }
                         } else {
                             this.checkSameColorStars(pSprite0);
-                            console.log("this.sameColorList", this.sameColorList);
                             if (this.sameColorList.length > 1) {
                                 // Sound.playEffect(PS_MAIN_SOUNDS.select);
                                 util.mlog("sound.select");
@@ -109,21 +101,12 @@ cc.Class({
                         }
                         break;
                     }
-
-
                 }
             }
         }
-        // var scene = cc.director.getScene();
-        // var touchLoc = event.touch.getLocation();
-        // var bullet = cc.instantiate(this.bullet);
-        // bullet.position = touchLoc;
-        // bullet.active = true;
-        // scene.addChild(bullet);
     },
     showScoreTip () {
         this.lb_tipScore.active = true;
-
         var length = this.sameColorList.length;
         var tip = length + " blocks " + length * length * 5 + " points";
         this.lb_tipScore.setLabel(tip);
@@ -136,12 +119,42 @@ cc.Class({
             if (simpleStar) {
                 var col = simpleStar.starData.indexOfColumn;
                 var row = simpleStar.starData.indexOfRow;
-                this.starTable[col].splice(row, 1, null);
-                // this.removeChild(simpleStar);
-                simpleStar.removeFromParent(true);
                 // 创建粒子效果 稍后调试
-                // 加分
 
+                // 加分
+                var starScoreSprite = cc.instantiate(this.tamplateLabel);
+                starScoreSprite.active = true;
+                starScoreSprite.setLabel(this.oneStarScore);
+                this.nd_lb.addChild(starScoreSprite);
+                var starPos = util.moveToOtherWordPoint(starScoreSprite, simpleStar);
+                starScoreSprite.setPosition(starPos)
+                
+                var toPos = util.moveToOtherWordPoint(starScoreSprite, this.sp_score);
+                var action = cc.sequence(
+                    cc.moveTo(0.3+k/20, toPos),
+                    cc.removeSelf(true),
+                    cc.callFunc(function () {
+                        this.totalScore += this.oneStarScore;
+                        this.lb_score.setLabel(this.totalScore);
+                        if (this.totalScore >= this.targetScore) {
+                                if (this.isClear == false) {
+                                    this.isClear = true;
+                                    this.lb_clear.active = true;
+                                    this.lb_clear.setPosition(cc.v2(0, -266))
+                                    var pos = cc.v2(-216, 100);
+                                    this.lb_clear.runAction(cc.sequence(
+                                        cc.delayTime(1),
+                                        cc.moveTo(1, pos)
+                                    ));
+                                    util.mlog("sound.clear");
+                                }
+                            }
+                    }, this)
+                );
+                starScoreSprite.runAction(action);
+
+                this.starTable[col].splice(row, 1, null);
+                simpleStar.removeFromParent(true);
             }
         }
         this.sameColorList = [];
@@ -186,8 +199,7 @@ cc.Class({
                 for (var k = 0; k < this.starTable[m].length; k++) {
                     this.starTable[m].splice(k, 1, null);
                 }
-            }
-            else {
+            } else {
                 for (var i = (m + 1); i < this.starTable.length; i++) {
                     for (var j = 0; j < this.starTable[i].length; j++) {
                         if (this.starTable[i][j] != null) {
@@ -212,9 +224,7 @@ cc.Class({
             for (var j = 0; j < length; j++) {
                 var pSprite0 = sprites[j];
                 if (pSprite0) {
-                    // var moveAction = cc.MoveTo(0.18, cc.v2(36 + i * this.starSize, 36 + j * this.starSize));
-                    // this.starTable[i][j].runAction(moveAction);
-                    pSprite0.getComponent("star").setArrPosition(pSprite0.starData.indexOfColumn, pSprite0.starData.indexOfRow);
+                    pSprite0.getComponent("star").moveArrPos(pSprite0.starData.indexOfColumn, pSprite0.starData.indexOfRow);
                     jj += pSprite0.starData.rand + pSprite0.starData.indexOfColumn + pSprite0.starData.indexOfRow + "    ";
                 }
                 else {
@@ -237,8 +247,7 @@ cc.Class({
                     if (this.checkOneStarFourSide(pSprite0).length > 0) {
                         isDead = false;
                         return;
-                    }
-                    else {
+                    } else {
                         deadCount += 1;
                     }
                 }
@@ -252,10 +261,6 @@ cc.Class({
                     var pSprite0 = this.starTable[ii][jj];
                     if (pSprite0 != null) {
                         var delay = 4 + 0.3 * ii - 0.4 * jj;
-                        pSprite0.runAction(cc.sequence(
-                                cc.delayTim(delay),
-                                cc.removeSelf(true)
-                        ));
                         // var starParticle = PopMain.StarParticleCreate(this, (36 + ii * this.starSize), (36 + jj * this.starSize), "spark");
                         // starParticle.runAction(cc.sequence(cc.scaleTo(0, 0),
                         //         cc.DelayTime(delay), cc.scaleTo(0, 1), cc.DelayTime(0.8),
@@ -267,23 +272,30 @@ cc.Class({
                                 this.totalScore += 1000;
                                 this.lb_score.setLabel(this.totalScore);
                             }
-
+                            // 剩下的能加多少分
                             this.oneDeadStarScore = Math.floor((1000 - deadCount * 100) / deadCount);
                             this.oneDeadStarScore = this.oneDeadStarScore - this.oneDeadStarScore % 10;
-                            // var starScoreSprite = PopMain.createScore(this,
-                            //         cc.p((36 + ii * this.starSize), (36 + jj * this.starSize)), this.oneDeadStarScore + "");
-                            // starScoreSprite.runAction(cc.Sequence.create(
-                            //         cc.scaleTo.create(0, 0),
-                            //         cc.DelayTime.create(delay), cc.scaleTo.create(0, 1),
-                            //         cc.MoveTo.create(0.3 + jj / 20, this.scoreFont.getPosition()),
-                            //         // cc.CleanUp.create(starScoreSprite),
-                            //         cc.CallFunc.create(function ()
-                            //         {
-                            //             this.totalScore += this.oneDeadStarScore;
-                            //             this.scoreFont.setString(this.totalScore + "");
-                            //         }, this),
-                            //         cc.removeSelf(true)
-                            // ))
+
+                            var starScoreSprite = cc.instantiate(this.tamplateLabel);
+                            starScoreSprite.active = true;
+                            starScoreSprite.setLabel(this.oneDeadStarScore);
+                            this.nd_lb.addChild(starScoreSprite);
+                            var starPos = util.moveToOtherWordPoint(starScoreSprite, pSprite0);
+                            starScoreSprite.setPosition(starPos)
+                            
+                            var toPos = util.moveToOtherWordPoint(starScoreSprite, this.sp_score);
+                            var action = cc.sequence(
+                                // cc.scaleTo(0, 0),
+                                cc.delayTime(delay),
+                                // cc.scaleTo(0, 1),
+                                cc.moveTo(0.3+jj/20, toPos),
+                                cc.callFunc(function () {
+                                    this.totalScore += this.oneDeadStarScore;
+                                    this.lb_score.setLabel(this.totalScore);
+                                }, this),
+                                cc.removeSelf(true),
+                            );
+                            starScoreSprite.runAction(action);
                         }
                     }
                 }
@@ -292,7 +304,7 @@ cc.Class({
         var self = this;
         this.node.delayCall(function () {
             self.winStar();
-        }, 5)
+        }, 5);
     },
     initStarTable () {
         this.starTable = new Array(this.numX);
@@ -332,18 +344,14 @@ cc.Class({
             // {
             //     cc.director.runScene(new PopstarScene);
             // }, 7);
-        }
-        else {
+        } else {
             // Sound.playEffect(PS_MAIN_SOUNDS.gameover);
+            util.mlog("lost sound.gameover");
             this.currentLevel = 1;
             this.currentLevelScore = 0;
-
-            util.mlog("lost");
-            // this.scheduleOnce(function ()
-            // {
-            //     util.mlog("enter StartLayer");
-            //     cc.director.runScene(new StarScene);
-            // }, 2)
+            this.node.delayCall(function () {
+                util.mlog("enter StartLayer")
+            }, 1);
         }
         if (this.totalScore > this.bestScore) {
             cc.sys.localStorage.setItem("starBestScore", this.totalScore + "");
@@ -360,11 +368,14 @@ cc.Class({
         starSprite.height = this.starSize;
 
         star.setColorWhich(random);
-        star.setArrPosition(colIndex, rowIndex);
+        var x = (this.sp_main.width / this.numX)*(colIndex+0.5);
+        var toPos = star.getArrPos(colIndex, rowIndex);
+        starSprite.setPosition(toPos.x, 1300);
         starSprite.starData = {rand: random, indexOfColumn: colIndex, indexOfRow: rowIndex};
-        // var fallAction = cc.MoveTo.create(flowTime, cc.p(36 + colIndex * this.starSize,
-        //     36 + rowIndex * this.starSize));
-        // starSprite.runAction(fallAction);
+
+        var flowTime = rowIndex / 10;
+        var fallAction = cc.moveTo(flowTime, toPos);
+        starSprite.runAction(fallAction);
 
         return starSprite;
     },
@@ -434,7 +445,6 @@ cc.Class({
                 var fourSide = this.checkOneStarFourSide(newSameColorList[i]);
                 if (fourSide.length > 0) {
                     for (var j = 0; j < fourSide.length; j++) {
-                        // if (!this.sameColorList.tabcontains(fourSide[j])) {
                         if (util.tabcontains(this.sameColorList, fourSide[j]) == false) {
                             this.sameColorList.push(fourSide[j]);
                             newSameColorList.push(fourSide[j]);
@@ -444,7 +454,6 @@ cc.Class({
                 newSameColorList.splice(i, 1);
             }
         }
-        // cc.log("sameColorList length==" + this.sameColorList.length);
         if (this.sameColorList.length > 1) {
             for (var k = 0; k < this.sameColorList.length; k++) {
                 var simpleStar = this.sameColorList[k];
@@ -454,7 +463,6 @@ cc.Class({
             }
         }
     },
-
 
     touchClose () {
     	uiFunc.closeUI(this);
