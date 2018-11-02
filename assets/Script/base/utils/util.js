@@ -109,6 +109,23 @@ util.playSound = function (path) {
 util.SoundClick = function () {
     util.playSound("common/Common_Panel_Dialog_Pop_Sound")
 };
+// 播放音效 传入本地路径 util.playSound("common/Common_Panel_Dialog_Pop_Sound")
+util.playMusic = function (path, isLoop) {
+    var fullPath = "audio/"+path;
+    if (GM.hasLoadSound[fullPath] == null) {
+        cc.loader.loadRes(fullPath, cc.AudioClip, function (err, clip) {
+            if (err) {
+                cc.error(err.message || err);
+                return;
+            }
+            cc.audioEngine.playMusic(clip, isLoop);
+            GM.hasLoadSound[fullPath] = clip;
+        });
+    } else {
+        cc.audioEngine.playEffect(GM.hasLoadSound[fullPath], false);
+    }
+}
+
 // 这里不能去掉img2 的原因是目前还没有封装完全  对于plist的图还没写进来 而且用户传的可能是#xx.png  util.display(self.sp_head, "img2/userhead/touxiang001")
 util.display = function(node, fileName) {
     if (fileName === undefined)

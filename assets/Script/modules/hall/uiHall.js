@@ -1,11 +1,12 @@
 
-var baseWin = require("baseWin")
+var baseWin = require("baseWin");
 
 cc.Class({
     extends: baseWin,
 
     start () {
     	this.initLogin();
+
     },
 
     initLogin () {

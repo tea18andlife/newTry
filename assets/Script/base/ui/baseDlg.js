@@ -28,8 +28,8 @@ cc.Class({
     onLoad () {
         this._super();
         util.loadSp(this.node, "img2/common/singleColor", function (sp_bg) {
-            sp_bg.width=1280;
-            sp_bg.height=1000;
+            sp_bg.width=1000;
+            sp_bg.height=1280;
             sp_bg.zIndex = -1;
             sp_bg.color = cc.color(0,0,0);
             sp_bg.opacity = this.mask?100:0;

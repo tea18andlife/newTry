@@ -29,6 +29,19 @@ cc.Class({
         this.isClear = false;
 
         this.init();
+
+        var self = this;
+        this.node.delayCall(function () {
+            // self.isClear = true;
+            // self.winStar();
+
+            uiFunc.openUI("common/uiCommonTips",(uiScript)=>{
+                uiScript.init({
+                    desc: "wocao",
+                    btnCount: 2,
+                });
+            })
+        }, 2);
     },
     init () {
         this.canTouch = true;
@@ -37,7 +50,8 @@ cc.Class({
         // 关卡
         this.lb_stage.setLabel(this.currentLevel);
         // 目标分数
-        this.lb_target.setLabel(1000*(1+this.currentLevel)*this.currentLevel/2);
+        this.targetScore = 1000 * (1 + this.currentLevel) * this.currentLevel / 2;
+        this.lb_target.setLabel(this.targetScore);
         // 得分
         this.lb_score.setLabel(this.totalScore);
         // 最高分 读取缓存 先跳过
@@ -49,6 +63,7 @@ cc.Class({
         }
         this.lb_best_score.setLabel(this.bestScore);
 
+        this.sp_main.off(cc.Node.EventType.TOUCH_START);
         this.sp_main.on(cc.Node.EventType.TOUCH_START, this.onTouchBegan, this);
     },
     onTouchBegan: function (event) {
@@ -68,8 +83,11 @@ cc.Class({
                     if (ccRect.contains(this.ccTouchBeganPos)) {
                         if (this.sameColorList.length > 1) {
                             if (util.tabcontains(this.sameColorList, pSprite0)) {
-                                // Sound.playEffect(PS_MAIN_SOUNDS.broken);
-                                util.mlog("Sound.broken");
+                                var len = Math.floor(this.sameColorList.length/2);
+                                if (len > 8) {
+                                    len = 8
+                                }
+                                util.playSound("star/star"+len);
                                 this.removeSameColorStars();
                                 this.lb_tipScore.active = false;
                             } else {
@@ -80,8 +98,7 @@ cc.Class({
                                 }
                                 this.checkSameColorStars(pSprite0);
                                 if (this.sameColorList.length > 1) {
-                                    // Sound.playEffect(PS_MAIN_SOUNDS.select);
-                                    util.mlog("sound.select");
+                                    util.SoundClick();
                                     this.showScoreTip();
                                 }
                                 else {
@@ -91,8 +108,7 @@ cc.Class({
                         } else {
                             this.checkSameColorStars(pSprite0);
                             if (this.sameColorList.length > 1) {
-                                // Sound.playEffect(PS_MAIN_SOUNDS.select);
-                                util.mlog("sound.select");
+                                util.SoundClick();
                                 this.showScoreTip();
                             }
                             else {
@@ -321,29 +337,33 @@ cc.Class({
         }
     },
     winStar () {
-
+        var self = this;
         if (this.isClear == true) {
             // Sound.playEffect(PS_MAIN_SOUNDS.win);
             util.mlog("Win");
             this.currentLevel += 1;
             this.currentLevelScore = this.totalScore;
+            var targetScore = 1000 * (1 + this.currentLevel) * this.currentLevel / 2;
+            this.canTouch = false;
 
-            // this.nextSprite.setLocalZOrder(100);
-            // var that = this;
-            // this.scheduleOnce(function ()
-            // {
-            //     that.nextLevelLabel.setString("level " + currentLevel + "");
-            //     that.nextTargetLabel.setString("target " + 1000 * (1 + currentLevel) * currentLevel / 2);
-            //     that.nextSprite.runAction(cc.Sequence.create(
-            //             cc.MoveTo.create(1, cc.p(0, 0)),
-            //             cc.DelayTime.create(2),
-            //             cc.MoveTo.create(1, cc.p(-730, 0))
-            //     ))
-            // }, 3);
-            // this.scheduleOnce(function ()
-            // {
-            //     cc.director.runScene(new PopstarScene);
-            // }, 7);
+            this.node.delayCall(function () {
+                self.sp_win.active = true;
+                self.sp_win.x = -cc.winSize.width;
+                self.sp_win.width = cc.winSize.width;
+                self.next_level.setLabel("level "+self.currentLevel);
+                self.next_target.setLabel("target "+targetScore);
+
+                var action = cc.sequence(
+                    cc.moveTo(1, cc.v2(0, 0)),
+                    cc.delayTime(2),
+                    cc.moveTo(1, cc.v2(-cc.winSize.width, 0)),
+                );
+                self.sp_win.runAction(action);
+            }, 3);
+
+            this.node.delayCall(function () {
+                self.init();
+            }, 7);
         } else {
             // Sound.playEffect(PS_MAIN_SOUNDS.gameover);
             util.mlog("lost sound.gameover");
