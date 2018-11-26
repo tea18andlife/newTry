@@ -6,7 +6,6 @@ cc.Class({
 
     start () {
     	this.initLogin();
-
     },
 
     initLogin () {
@@ -61,9 +60,13 @@ cc.Class({
     	var self = this;
     	this.btn_1.quickBt(function () {
     		uiFunc.closeUI(self, true);
-            // uiFunc.openUI("2048/ui2048");
             uiFunc.openUI("plusOne/uiPlusOne");
     	});
+
+        this.btn_2.quickBt(function () {
+            uiFunc.closeUI(self, true);
+            uiFunc.openUI("popStar/uiPopStar");
+        });
     },
     touchClose () {
     	uiFunc.closeUI(this, true);

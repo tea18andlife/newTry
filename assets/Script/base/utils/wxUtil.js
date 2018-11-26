@@ -101,7 +101,7 @@ wxUtil.getUserInfo = function (callBack,failcallBack) {
 wxUtil.getLaunchParam=function(){
     if(CC_WECHATGAME){
         var arg = wx.getLaunchOptionsSync();
-        log("小程序启动参数",arg);
+        cc.log("小程序启动参数",arg);
         return arg;
     }
     return {};
@@ -190,25 +190,25 @@ wxUtil.createUserInfoButton=function(btn,callback){
 
 wxUtil.getUserStorageDataSync =function(key) {
     cc.log("===========key : ", key);
+    if (CC_WECHATGAME) {
+        if (typeof key === "string" && key.length > 0) {
+            var fullKey = "Storage" + key;
 
-    if (typeof key === "string" && key.length > 0) {
-        var fullKey = "Storage" + key;
-
-        return wx.getStorageSync(fullKey);
+            return wx.getStorageSync(fullKey);
+        }
     }
 
     return null;
 };
 
-wxUtil.saveUserStorageDataSync =function(value, key) {
+wxUtil.saveUserStorageDataSync =function(key, value) {
     cc.log("===========value, key : ", value, " ---- ", key);
-
-    if (typeof key === "string" && key.length > 0) {
-        var fullKey = "Storage" + key;
-
-        wx.setStorageSync(fullKey, value);
-
-        return true;
+    if (CC_WECHATGAME) {
+        if (typeof key === "string" && key.length > 0) {
+            var fullKey = "Storage" + key;
+            wx.setStorageSync(fullKey, value);
+            return true;
+        }
     }
 
     return false;

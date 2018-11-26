@@ -218,4 +218,20 @@ util.tabcontains = function (tab, value) {
     return false;
 };
 
+util.getStorageData = function (key) {
+    if (CC_WECHATGAME) {
+        return wxUtil.getUserStorageDataSync(key);
+    } else {
+        return cc.sys.localStorage.getItem(key);
+    }
+}
+
+util.saveStorageData = function (key, value) {
+    if (CC_WECHATGAME) {
+        return wxUtil.saveUserStorageDataSync(key, value);
+    } else {
+        cc.sys.localStorage.setItem(key, value);
+    }
+}
+
 module.exports = util;

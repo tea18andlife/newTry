@@ -37,8 +37,6 @@ uiFunc.openUI = function(uiPath, callBack) {
         }
     }
 
-
-
     var findtemp = this.findUI(uiPath)
     if (findtemp)
     {

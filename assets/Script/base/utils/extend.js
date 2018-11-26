@@ -5,6 +5,7 @@ GM.hasLoadImg = {};
 GM.hasLoadSound = {};
 GM.hasLoadCsv = {};
 GM.wxMsg = {};
+GM.hasTouchDown = false;
 
 cc.Node.prototype.to = function(father, zorder, tag) {
     zorder = zorder || 0;
@@ -97,11 +98,20 @@ cc.Node.prototype.quickBt = function(fn, touchSilence, Shield) {
     this.lastClickTime = 0; // 上次点击时间
     this.clickCdTime = 300  // 毫秒
     this.canTouch = true;
+    this.iHasTouchBegan = false;
 
     this.on(cc.Node.EventType.TOUCH_START, function(event) {
         // console.log("TOUCH_START");
-        if (this.canTouch == false)
+        if (this.canTouch == false){
             return;
+        }
+        if (GM.hasTouchDown == true) {
+            return;
+        }
+
+        this.iHasTouchBegan = true;
+        GM.hasTouchDown = true;
+
         this.BeganScale_ = this.getScale();
         this.BeganOpacity_ = this.opacity;
         if (!touchSilence) {
@@ -113,6 +123,12 @@ cc.Node.prototype.quickBt = function(fn, touchSilence, Shield) {
     this.on(cc.Node.EventType.TOUCH_CANCEL, function(event) {
         if (this.canTouch == false)
             return;
+        if (this.iHasTouchBegan == false)
+            return;
+
+        GM.hasTouchDown = false;
+        this.iHasTouchBegan = false;
+
         if (!touchSilence) {
             this.setScale(this.BeganScale_);
             this.opacity = this.BeganOpacity_;
@@ -122,6 +138,12 @@ cc.Node.prototype.quickBt = function(fn, touchSilence, Shield) {
     this.on(cc.Node.EventType.TOUCH_END, function(event) {
         if (this.canTouch == false)
             return;
+        if (this.iHasTouchBegan == false)
+            return;
+
+        GM.hasTouchDown = false;
+        this.iHasTouchBegan = false;
+
         if (!touchSilence) {
             this.setScale(this.BeganScale_);
             this.opacity = this.BeganOpacity_;
@@ -149,8 +171,13 @@ cc.Node.prototype.quickBt = function(fn, touchSilence, Shield) {
         // console.log("TOUCH_END");
     }, this);
 
+    this.autoClick = function () {
+        fn();
+    }
+
     return this;
 };
+
 cc.Node.prototype.onClick = function(func,target,isNotScale){
 
 
@@ -248,6 +275,72 @@ String.prototype.format = function(args) {
     }
     return result;
 };
+
+/***********************Node*************************/
+//禁用多点触摸
+
+cc.Node.maxTouchNum = 1;
+cc.Node.touchNum = 0;
+var __dispatchEvent__ = cc.Node.prototype.dispatchEvent;
+cc.Node.prototype.dispatchEvent = function (event) {
+    switch (event.type) {
+        case cc.Node.EventType.TOUCH_START:
+            if (cc.Node.touchNum < cc.Node.maxTouchNum) {
+                cc.Node.touchNum++;
+                this._canTouch = true;
+                __dispatchEvent__.call(this, event);
+            }
+            break;
+        case cc.Node.EventType.TOUCH_MOVE:
+            if (!this._canTouch && cc.Node.touchNum < cc.Node.maxTouchNum) {
+                this._canTouch = true;
+                cc.Node.touchNum++;
+            }
+
+            if (this._canTouch) {
+                __dispatchEvent__.call(this, event);
+            }
+
+            break;
+        case cc.Node.EventType.TOUCH_END:
+            if (this._canTouch) {
+                this._canTouch = false;
+                cc.Node.touchNum--;
+                __dispatchEvent__.call(this, event);
+            }
+            break;
+        case cc.Node.EventType.TOUCH_CANCEL:
+            if (this._canTouch) {
+                this._canTouch = false;
+                cc.Node.touchNum--;
+                __dispatchEvent__.call(this, event);
+            }
+            break;
+        default:
+            __dispatchEvent__.call(this, event);
+    }
+};
+
+//多点触摸屏蔽时,如果被点的界面被销毁或隐藏会导致界面不能点击的问题
+var onPostActivated = cc.Node.prototype._onPostActivated;
+cc.Node.prototype._onPostActivated = function (active) {
+    if(!active && this._canTouch){
+    this._canTouch = false;
+    cc.Node.touchNum--;
+    }
+    onPostActivated.call(this,active);
+};
+
+var onPreDestroy = cc.Node.prototype._onPreDestroy;
+cc.Node.prototype._onPreDestroy = function () {
+    if(this._canTouch){
+    this._canTouch = false;
+    cc.Node.touchNum--;
+    }
+
+    onPreDestroy.call(this);
+};
+/***********************Node*************************/
 
 // Array.prototype.contains = function (value)
 // {

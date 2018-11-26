@@ -26,24 +26,29 @@ cc.Class({
         this.sameColorList = [];
 
         this.totalScore = 0;
-        this.isClear = false;
+        // this.isClear = false;
 
         this.init();
 
         var self = this;
-        this.node.delayCall(function () {
-            // self.isClear = true;
-            // self.winStar();
+        this.btn_back.quickBt(function () {
+            self.touchBack();
+        });
 
-            uiFunc.openUI("common/uiCommonTips",(uiScript)=>{
-                uiScript.init({
-                    desc: "wocao",
-                    btnCount: 2,
-                });
-            })
-        }, 2);
+        // var self = this;
+        // this.node.delayCall(function () {
+        //     uiFunc.openUI("common/uiCommonTips",(uiScript)=>{
+        //         uiScript.init({
+        //             desc: "wocao",
+        //             btnCount: 2,
+        //         });
+        //     })
+        // }, 2);
     },
     init () {
+        this.isClear = false;
+        this.lb_clear.active = false;
+
         this.canTouch = true;
         // 初始化星星
         this.initStarTable();
@@ -55,7 +60,8 @@ cc.Class({
         // 得分
         this.lb_score.setLabel(this.totalScore);
         // 最高分 读取缓存 先跳过
-        this.bestScore = cc.sys.localStorage.getItem("starBestScore");
+        // this.bestScore = cc.sys.localStorage.getItem("starBestScore");
+        this.bestScore = util.getStorageData("starBestScore");
         if (this.bestScore != null && this.bestScore != undefined) {
             this.bestScore = Number(this.bestScore);
         } else {
@@ -75,8 +81,11 @@ cc.Class({
         this.ccTouchBeganPos = pos;
 
         for (var i = 0; i < this.starTable.length; i++) {
+
             for (var j = 0; j < this.starTable[i].length; j++) {
+
                 if (this.starTable[i][j] && this.starTable[i][j] != null) {
+
                     var mPos = this.starTable[i][j].getPosition();
                     var ccRect = cc.rect(mPos.x-this.starSize/2, mPos.y-this.starSize/2, this.starSize, this.starSize);
                     var pSprite0 = this.starTable[i][j];
@@ -91,7 +100,7 @@ cc.Class({
                                 this.removeSameColorStars();
                                 this.lb_tipScore.active = false;
                             } else {
-                                for (var k = 0; k < this.sameColorList.length; k++) {
+                                for (let k = 0; k < this.sameColorList.length; k++) {
                                     if (this.sameColorList[k]) {
                                         this.sameColorList[k].runAction(cc.scaleTo(0.1, 1));
                                     }
@@ -130,7 +139,7 @@ cc.Class({
     removeSameColorStars () {
         var length = this.sameColorList.length;
         this.oneStarScore = 5 * length;
-        for (var k = 0; k < length; k++) {
+        for (let k = 0; k < length; k++) {
             var simpleStar = this.sameColorList[k];
             if (simpleStar) {
                 var col = simpleStar.starData.indexOfColumn;
@@ -273,10 +282,16 @@ cc.Class({
         if (isDead) {
             this.canTouch = false;
             for (var jj = 9; jj >= 0; jj--) {
+
                 for (var ii = 0; ii < 10; ii++) {
+
                     var pSprite0 = this.starTable[ii][jj];
                     if (pSprite0 != null) {
                         var delay = 4 + 0.3 * ii - 0.4 * jj;
+                        pSprite0.runAction(cc.sequence(
+                            cc.delayTime(delay),
+                            cc.removeSelf(true)
+                        ));
                         // var starParticle = PopMain.StarParticleCreate(this, (36 + ii * this.starSize), (36 + jj * this.starSize), "spark");
                         // starParticle.runAction(cc.sequence(cc.scaleTo(0, 0),
                         //         cc.DelayTime(delay), cc.scaleTo(0, 1), cc.DelayTime(0.8),
@@ -369,12 +384,15 @@ cc.Class({
             util.mlog("lost sound.gameover");
             this.currentLevel = 1;
             this.currentLevelScore = 0;
+            var self = this;
             this.node.delayCall(function () {
-                util.mlog("enter StartLayer")
+                // util.mlog("enter StartLayer")
+                self.touchBack();
             }, 1);
         }
         if (this.totalScore > this.bestScore) {
-            cc.sys.localStorage.setItem("starBestScore", this.totalScore + "");
+            // cc.sys.localStorage.setItem("starBestScore", this.totalScore + "");
+            util.saveStorageData("starBestScore", this.totalScore)
         }
     },
     getRandomStar (colIndex, rowIndex) {

@@ -2056,7 +2056,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 142.25,
+      "width": 80,
       "height": 40
     },
     "_anchorPoint": {
@@ -2102,8 +2102,8 @@
     "_srcBlendFactor": 1,
     "_dstBlendFactor": 771,
     "_useOriginalSize": false,
-    "_string": "SCORE",
-    "_N$string": "SCORE",
+    "_string": "得分",
+    "_N$string": "得分",
     "_fontSize": 40,
     "_lineHeight": 40,
     "_enableWrapText": true,
@@ -3606,6 +3606,7 @@
       "__id__": 1
     },
     "_enabled": true,
+    "openAction": false,
     "tilePre": {
       "__uuid__": "dc378061-c563-49f6-a98a-c72cea71fdd1"
     },
