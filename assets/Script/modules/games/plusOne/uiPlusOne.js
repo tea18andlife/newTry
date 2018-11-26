@@ -80,11 +80,7 @@ cc.Class({
 
     getMaxScore () {
         // this.maxScoreNum = null;
-        if (CC_WECHATGAME) {
-            this.maxScoreNum = wx.getStorageSync('maxScoreNum');
-        } else {
-            this.maxScoreNum = cc.sys.localStorage.getItem('maxScoreNum');
-        }
+        this.maxScoreNum = util.getStorageData('maxScoreNum');
         if (this.maxScoreNum == null) {
             this.maxScoreNum = 0;
         } else {
@@ -103,12 +99,7 @@ cc.Class({
     storageMaxScore () {
         console.log("storageMaxScore", this.lb_score, this.max_score);
         if (this.lb_score > 0 && this.lb_score > this.max_score) {
-            if (CC_WECHATGAME) {
-                wx.setStorage({ key:"maxScoreNum", data:this.lb_score })
-                // wx.setStorageSync('key', 'value')
-            } else {
-                cc.sys.localStorage.setItem('maxScoreNum', this.lb_score);
-            }
+            util.saveStorageData('maxScoreNum', this.lb_score);
         }
     },
     /*
