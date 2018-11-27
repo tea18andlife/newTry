@@ -61,12 +61,11 @@ cc.Class({
         this.lb_score.setLabel(this.totalScore);
         // 最高分 读取缓存 先跳过
         // this.bestScore = cc.sys.localStorage.getItem("starBestScore");
-        this.bestScore = util.getStorageData("starBestScore");
-        if (this.bestScore != null && this.bestScore != undefined) {
-            this.bestScore = Number(this.bestScore);
-        } else {
-            this.bestScore = 0;
+        var bestScore = util.getStorageData("starBestScore");
+        if (bestScore == "") {
+            bestScore = 0;
         }
+        this.bestScore = bestScore;
         this.lb_best_score.setLabel(this.bestScore);
 
         this.sp_main.off(cc.Node.EventType.TOUCH_START);
@@ -391,7 +390,6 @@ cc.Class({
             }, 1);
         }
         if (this.totalScore > this.bestScore) {
-            // cc.sys.localStorage.setItem("starBestScore", this.totalScore + "");
             util.saveStorageData("starBestScore", this.totalScore)
         }
     },

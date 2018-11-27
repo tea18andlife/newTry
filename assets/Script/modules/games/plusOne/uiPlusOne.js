@@ -84,11 +84,14 @@ cc.Class({
         if (this.maxScoreNum == null) {
             this.maxScoreNum = 0;
         } else {
-            this.maxScoreNum = parseInt(this.maxScoreNum);
+            if (this.maxScoreNum == "") {
+                this.maxScoreNum = 0;
+            }
         }
         console.log("this.maxScoreNum", this.maxScoreNum);
     },
     setMaxScore () {
+        console.log("this.maxScoreNum", this.maxScoreNum);
         if (this.maxScoreNum == null || this.maxScoreNum == 0) {
             this.max_score.active = false;
         } else {
