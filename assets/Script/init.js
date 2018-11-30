@@ -4,3 +4,9 @@
 window.util = require("util")
 require("uiFunc")
 require("initDatas")
+
+window.ShaderMaterial = require("ShaderMaterial");
+window.ShaderManager = require("ShaderManager");
+window.ShaderLab = require("ShaderLab");
+
+
