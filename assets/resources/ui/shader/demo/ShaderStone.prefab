@@ -12,7 +12,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "wenyuSp",
+    "_name": "ShaderStone",
     "_objFlags": 0,
     "_parent": null,
     "_children": [],
@@ -103,7 +103,7 @@
     "_id": ""
   },
   {
-    "__type__": "dee06w9ZA9CzbCHO4xoWVpG",
+    "__type__": "4acb5KAM89B7rRkibqaQ4Rk",
     "_name": "",
     "_objFlags": 0,
     "node": {
@@ -118,9 +118,9 @@
       "__id__": 1
     },
     "asset": {
-      "__uuid__": "7659ece3-b3da-4eb1-abb7-3fac72affe64"
+      "__uuid__": "945f0bb8-2aed-4e77-957b-fcfb154044e0"
     },
-    "fileId": "85GkowZY5C55FxOCb2hdWs",
+    "fileId": "03NWKBmTpHx5C+HFx3UsSK",
     "sync": false
   }
 ]

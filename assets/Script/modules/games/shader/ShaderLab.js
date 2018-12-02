@@ -1,4 +1,24 @@
 
+window.ShaderType = cc.Enum({
+    Default: 0,
+    Gray: 1,
+    GrayScaling: 100,
+    Stone: 101,
+    Ice: 102,
+    Frozen: 103,
+    Mirror: 104,
+    Poison: 105,
+    Banish: 106,
+    Vanish: 107,
+    Invisible: 108,
+    Blur: 109,
+    GaussBlur: 110,
+    Dissolve: 111,
+    Fluxay: 112,
+    FluxaySuper: 113,
+});
+
+
 const MVP = `
 uniform mat4 viewProj;
 attribute vec3 a_position;
@@ -10,7 +30,7 @@ void main () {
     uv0 = a_uv0;
 }`;
 
-const ShaderLab = {
+var ShaderLab = {
     GrayScaling: {
         vert: MVP,
         frag: 

@@ -4,8 +4,10 @@ window.GM = {}
 GM.hasLoadImg = {};
 GM.hasLoadSound = {};
 GM.hasLoadCsv = {};
+GM.hasLoadPrefab = {};
 GM.wxMsg = {};
 GM.hasTouchDown = false;
+GM.count = 0;
 
 cc.Node.prototype.to = function(father, zorder, tag) {
     zorder = zorder || 0;

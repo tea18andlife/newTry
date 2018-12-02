@@ -1,8 +1,5 @@
 
-// var ShaderManager = require("ShaderManager");
-// var ShaderMaterial = require("ShaderMaterial");
-
-// const NeedUpdate = [ShaderType.Fluxay, ShaderType.FluxaySuper];
+const {ccclass, property, requireComponent, executeInEditMode} = cc._decorator;
 
 window.ShaderType = cc.Enum({
     Default: 0,
@@ -23,43 +20,33 @@ window.ShaderType = cc.Enum({
     FluxaySuper: 113,
 });
 
-const NeedUpdate = [ShaderType.Fluxay, ShaderType.FluxaySuper];
+console.log("ShaderType", ShaderType);
 
-cc.Class({
-    extends: cc.Component,
+@ccclass
+// @requireComponent(cc.Sprite)
+export default class ShaderComponent extends cc.Component {
+    @property({ type: cc.Enum(ShaderType), visible: false })
+    private _shader: ShaderType = ShaderType.Gray;
 
-    properties: {
-    	mShader: {
-            default: ShaderType.Default,
-            type: ShaderType
-        },
-    },
-    // ctor () {
-    // 	console.log("ctor wocao");
-    // },
+    // @property({ type: cc.Enum(ShaderType) })
+    // get shader() { return this._shader; }
+    // set shader(type) {
+    //     this._shader = type;
+    //     this._applyShader();
+    // }
 
-    onLoad () {
-    	this._color = cc.color();
-    	this._start = 0;
+    private _color = cc.color();
+    private _start = 0;
 
-    	this._shader = this.mShader;
-    	// this._material = ShaderMaterial;
-    	console.log("this._color", this._color);
+    protected start() {
+        this.getComponent(cc.Sprite).setState(0);
+        this._applyShader();
+    }
 
-    	// console.log("ShaderComponent", ShaderLab);
-    	// console.log("this.type", this.mShader);
-    	this.node.getComponent(cc.Sprite).setState(0);
-    	this._applyShader();
-        // this._applyShader();
-        console.log("wocao");
-    },
-
-    _applyShader() {
+    private _applyShader() {
         let shader = this._shader;
-        let sprite = this.node.getComponent(cc.Sprite);
-        console.log("ShaderManager", ShaderManager);
-        let material = ShaderManager.useShader(sprite, shader);
-
+        let sprite = this.getComponent(cc.Sprite);
+        let material = util.useShader(sprite, shader);
         this._material = material;
         this._start = 0;
         let clr = this._color;
@@ -74,9 +61,9 @@ cc.Class({
                 break;
         }
         this._setShaderColor();
-    },
+    }
 
-    _setShaderColor() {
+    private _setShaderColor() {
         let node = this.node;
         let c0 = node.color;
         let c1 = this._color;
@@ -87,9 +74,9 @@ cc.Class({
         if (c1.getB() !== b) { c1.setB(b); f = !0; }
         if (c1.getA() !== a) { c1.setA(a); f = !0; }
         f && this._material.setColor(r / 255, g / 255, b / 255, a / 255);
-    },
+    }
 
-    _setShaderTime(dt) {
+    private _setShaderTime(dt) {
         if (NeedUpdate.indexOf(this._shader) >= 0) {
             let start = this._start;
             if (start > 65535) start = 0;
@@ -97,9 +84,7 @@ cc.Class({
             this._material.setTime(start);
             this._start = start;
         }
-    },
+    }
 
-
-});
-
-
+    // update (dt) {}
+}

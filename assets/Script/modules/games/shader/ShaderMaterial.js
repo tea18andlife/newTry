@@ -5,12 +5,8 @@ const Material = renderEngine.Material;
 var material = cc.Class({
     extends: Material,
 
-    // properties: {
-
-    // },
     callfunc (name, vert, frag, defines) {
-        console.log("shaderMaterial.constructor", name, vert, frag, defines);
-    	let renderer = cc.renderer; //as any;
+    	let renderer = cc.renderer;
         let lib = renderer._forward._programLib;
         !lib._templates[name] && lib.define(name, vert, frag, defines);
         this.init(name);

@@ -41,8 +41,8 @@
     },
     "_scale": {
       "__type__": "cc.Vec3",
-      "x": 0.4734375,
-      "y": 0.4734375,
+      "x": 0.26875,
+      "y": 0.26875,
       "z": 1
     },
     "_quat": {
@@ -335,14 +335,14 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "cocos",
+    "_name": "HelloWorld",
     "_objFlags": 0,
     "_parent": {
       "__id__": 2
     },
     "_children": [],
     "_active": true,
-    "_level": 0,
+    "_level": 1,
     "_components": [
       {
         "__id__": 9
@@ -372,8 +372,8 @@
     },
     "_position": {
       "__type__": "cc.Vec3",
-      "x": 0,
-      "y": 50,
+      "x": 231,
+      "y": 37,
       "z": 0
     },
     "_scale": {
@@ -395,7 +395,7 @@
     "_skewY": 0,
     "_zIndex": 0,
     "groupIndex": 0,
-    "_id": "c4f30YOS65G64U2TwufdJ+2"
+    "_id": "19/u3cDs9PXqJp2p8GSj92"
   },
   {
     "__type__": "cc.Sprite",
@@ -423,18 +423,26 @@
     "_isTrimmedMode": true,
     "_state": 0,
     "_atlas": null,
-    "_id": "57/dS9tDxGqI3sfSZtnFGG"
+    "_id": "a5nEoUPlNN5I/Xb/SLrNF/"
   },
   {
-    "__type__": "8f6a2KCXNJDHZdxVRGS9oi+",
+    "__type__": "24a81vUokJHILyIRMUhUXQw",
     "_name": "",
     "_objFlags": 0,
     "node": {
       "__id__": 8
     },
     "_enabled": true,
-    "mShader": 102,
-    "_id": "dchQMkA/RMm7wdqRnV495Q"
+    "mShader": 101,
+    "_color": {
+      "__type__": "cc.Color",
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 255
+    },
+    "_start": 0,
+    "_id": "6dLQrWpmlFU5xdU2R+K+ua"
   },
   {
     "__type__": "cc.Canvas",
