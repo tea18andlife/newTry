@@ -173,6 +173,8 @@ cc.Node.prototype.quickBt = function(fn, touchSilence, Shield) {
         // console.log("TOUCH_END");
     }, this);
 
+    this._touchListener.swallowTouches = true;
+
     this.autoClick = function () {
         fn();
     }

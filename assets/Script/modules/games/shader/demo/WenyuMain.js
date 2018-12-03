@@ -19,6 +19,8 @@ cc.Class({
 
         this.loadDisplay();
 
+        this.touchNode = cc.find("touchNode", this.node);
+        this.touchNode.zIndex = -1;
         this.addBigTouch();
     },
 
