@@ -61,6 +61,12 @@ void main()
         this._material = material;
 
         this.changePosX();
+
+        var self = this;
+        this.node.quickBt(function () {
+            let str = ""+self.node.index+"\n"+self.node.x.toFixed(2);
+            util.mlog(str);
+        });
     },
 
     changePosX () {
