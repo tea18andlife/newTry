@@ -46,10 +46,7 @@ void main()
         normalColor = vec4(0.);
     }        
     gl_FragColor = color * vec4(normalColor);
-    //vec4 c = color * texture2D(texture, uv0);
-    //gl_FragColor = c;
 }
-
 `
         // GM.count += 1;
         var lab = {
@@ -64,13 +61,6 @@ void main()
         this._material = material;
 
         this.changePosX();
-
-
-        var self = this;
-        this.node.quickBt(function () {
-            let str = ""+self.node.index+"\n"+self.node.x.toFixed(2);
-            util.mlog(str)
-        });
     },
 
     changePosX () {
