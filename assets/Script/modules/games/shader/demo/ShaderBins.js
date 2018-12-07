@@ -1,4 +1,3 @@
-
 cc.Class({
     extends: cc.Component,
 
@@ -7,8 +6,6 @@ cc.Class({
     },
 
     start () {
-        // this._color = cc.color();
-        this._start = 0;
         this.node.script = this;
         this.pos_desc = cc.find("pos_desc", this.node);
 
@@ -28,8 +25,8 @@ varying vec2 uv0;
 varying vec4 color;
 uniform vec3 pos;
 
-const float waterwid = 0.1;
-const float deepwid = 0.2;
+const float waterwid = 0.5;
+const float deepwid = 0.01;
 const float pi = 3.141592653589793;
 
 float CountScale(float left,float right)
@@ -81,7 +78,6 @@ void main() {
     gl_FragColor = mycolor;
 }
 `
-    
         var lab = {
             vert: mVert,
             frag: mFrag,
@@ -118,14 +114,4 @@ void main() {
         this.pos_desc.setLabel("x:"+x.toFixed(2)+" y:"+y.toFixed(2))
         this._material.setPos(x, 1-y, 0);
     },
-
-    // update (dt) {
-    //     if (this._start > 65535) {
-    //         this._start = 0;
-    //     }
-    //     this._start += dt;
-
-    //     this._material.setTime(this._start);
-    // },
-    
 });

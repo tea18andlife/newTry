@@ -138,6 +138,4 @@ cc.Class({
             this.mPreX = null;
         }, this);
     }
-
-
 });

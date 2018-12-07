@@ -22,7 +22,10 @@ cc.Class({
         var self = this;
         util.openUi("shader/demo/WenyuMain", function(panel) {
             self.center_node.addChild(panel);
+            // panel.y = -200;
         })
+
+
 
     },
 

@@ -48,7 +48,6 @@ void main()
     gl_FragColor = color * vec4(normalColor);
 }
 `
-        // GM.count += 1;
         var lab = {
             vert: mVert,
             frag: mFrag,
@@ -61,12 +60,6 @@ void main()
         this._material = material;
 
         this.changePosX();
-
-        var self = this;
-        this.node.quickBt(function () {
-            let str = ""+self.node.index+"\n"+self.node.x.toFixed(2);
-            util.mlog(str);
-        });
     },
 
     changePosX () {
@@ -76,5 +69,4 @@ void main()
 
         this._material.setPos(x, 0.5, 0);
     },
-
 });
