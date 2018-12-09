@@ -1,0 +1,67 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>&#65279</title>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<style>
+div.img{
+    position:relative;
+}
+div.img:before{
+    position:absolute;
+    top:0;
+    right:0;
+    bottom:0;
+    left:0;
+    z-index:2;
+    content:"\20";
+    width:100%;
+    height:100%;
+    display:block;
+    background-color:rgba(255,255,255,0);
+}
+div.img>img{
+width:100%;
+height:100%;
+    max-width:100%;
+    display:block;
+}
+</style>
+<!--做一个浮层，覆盖图片，防止长按图片弹出保存图片菜单-->
+</head>
+<body ontouchstart = "return false;"><!--ontouchstart = "return false;"--><!--屏蔽下拉-缩放-->
+
+ 	<div id="img2" class="img"><img src="/media/img/psb.jpg" alt="" /><br /></div>
+      
+</body>
+<script>
+	wx.config({
+		debug: false,
+		appId: 'wxf8fed7ad5fd19c50',
+		timestamp: 1527864237,
+	nonceStr: '8BIxl9TkjTc10jZh',
+			signature: '0b7d5fa5e74de73ccecd6d09d3dee10095dcd9d1',
+			jsApiList: [
+		// 所有要调用的 API 都要加到这个列表中
+		// 所有要调用的 API 都要加到这个列表中
+		'onMenuShareTimeline',
+		'onMenuShareAppMessage'
+	]
+	});
+
+
+	wx.ready(function () {
+		var shareData = {
+			title:"",
+			desc:"　",
+			link: location.href.split('#')[0],
+			imgUrl: document.getElementById("img2").getElementsByTagName("img")[0].src
+		};
+		wx.onMenuShareAppMessage(shareData);
+		wx.onMenuShareTimeline(shareData);
+	});
+</script>
+
+</html>
