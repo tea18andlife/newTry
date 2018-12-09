@@ -3,14 +3,15 @@ import xadmin
 
 from .models import *
 
-class ClassAdmin(object):
-    list_display = ('id', 'name', 'photo')
+# class ClassAdmin(object):
+#     list_display = ('id', 'name', 'photo')
+# xadmin.site.register(Class, ClassAdmin)
 
-xadmin.site.register(Class, ClassAdmin)
+# class IDCardAdmin(object):
+#     list_display = ('number', 'student')
+# xadmin.site.register(IDCard, IDCardAdmin)
 
-class IDCardAdmin(object):
-    list_display = ('number', 'student')
-
-xadmin.site.register(IDCard, IDCardAdmin)
-
+class MyUserAdmin(object):
+    list_display = ('id', "userName")
+xadmin.site.register(MyUser, MyUserAdmin)
 

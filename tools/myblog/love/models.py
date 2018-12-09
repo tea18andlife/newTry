@@ -3,6 +3,25 @@ from django.db import models
 from datetime import datetime
 import os
 
+CharMaxLength = 128
+
+class MyUser(models.Model):
+    # 用户名 密码-微信直接根据userid登录成功不需要密码 所以这里就先不设置了 
+    userName = models.CharField(verbose_name=u'用户名', max_length=64, default='')
+    # 游戏记录
+    gameDatas = models.TextField(verbose_name=u'日志', blank=True, null=True)
+
+    # class Meta:
+    #     verbose_name = u'用户'
+    #     verbose_name_plural = u'用户'
+    #     # ordering = ['userName']
+
+    # def __unicode__(self):
+    #     return self.userName
+
+
+### 以下部分为初始化这个项目适合的测试配置表
+
 class Class(models.Model):
 
     name = models.CharField(verbose_name=u'名称', max_length=64,default='')
